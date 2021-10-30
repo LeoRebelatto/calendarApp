@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 import { Reminder } from "../../_interfaces/reminder.interface";
 import AddReminder from "../add-reminder-component/add-reminder-component";
 import "./month-component.scss";
@@ -9,27 +11,22 @@ interface Day {
 }
 
 interface ComponentProps {
-  month_id: number;
+  month: number;
+  year: number;
 }
 
 export function Month(props: ComponentProps) {
+  const currentDate = useSelector((state: RootState) => state.data);
   const [showModal, setShowModal] = useState(false);
   const [daySelected, setDaySelected] = useState<any>();
   var totalDays: Day[] = [];
-  const [newReminderData, setNewReminderData] = useState<Reminder>({
-    name: "teste",
-    color: "#000000",
-    description: "teste",
-    time: "15:00",
-  });
-  const date = new Date(2021, props.month_id, 0);
+  const date = new Date(props.year, props.month, 0);
 
   getDays();
   //addNewReminder()
 
   function showAddReminder(id: any) {
     setDaySelected(id);
-    addNewReminder();
     setShowModal((prev) => !prev);
   }
 
@@ -42,16 +39,38 @@ export function Month(props: ComponentProps) {
         reminders: [],
       });
     }
-    //totalDays.length > 0 ? setIsLoadding(false) : setIsLoadding(true);
+    getReminders();
   }
 
-  function addNewReminder(){
-    totalDays.map((res, i)=>{
-      if(res.id === daySelected){
-        totalDays[i].reminders.push(newReminderData);
-      }
+  function allStorage() {
+
+    var values = [],
+        keys = Object.keys(localStorage),
+        i = keys.length;
+
+    while ( i-- ) {
+        values.push( localStorage.getItem(keys[i]) );
+    }
+
+    return values;
+}
+
+  function getReminders() { 
+    let allReminders = allStorage();
+    allReminders.map((el: any)=>{
+      totalDays.map((res, i) => {
+        let date = new Date(
+          currentDate.year,
+          currentDate.month,
+          res.id
+        ).toString();
+        let obj: any | null = JSON.parse(el);
+        if(obj?.date === date){
+          let teste: Reminder = obj;
+          totalDays[i].reminders.push(teste)
+        }
+      });
     })
-    console.log(totalDays)
   }
 
   return (
@@ -87,7 +106,7 @@ export function Month(props: ComponentProps) {
         <AddReminder
           showModal={showModal}
           setShowModal={setShowModal}
-          setNewReminderData={setNewReminderData}
+          day={daySelected}
         />
       )}
     </>

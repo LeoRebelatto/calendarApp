@@ -1,25 +1,27 @@
-import React from "react";
-import { Provider, useSelector } from "react-redux";
-import { createStore } from "redux";
+import { useSelector } from "react-redux";
 import "./App.scss";
 import { Month } from "./components/month-component/month-component";
 
-import dateSlice, { decrement, increment } from "./redux/date-slice";
-import { useAppDispatch, useAppSelector } from "./redux/hooks";
+import { decrement, increment } from "./redux/date-slice";
+import { useAppDispatch } from "./redux/hooks";
 import { RootState } from "./redux/store";
 
 function App() {
   const currentDate = useSelector((state: RootState) => state.data);
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
-  return(
+  return (
     <>
-    <button onClick={()=>dispatch(decrement())}>&lt;</button>
-    <span>{currentDate.month + 1}/{currentDate.year}</span>
-    <button onClick={()=>dispatch(increment())}>&gt;</button>
-    <Month month_id={currentDate.month} />
+      <div className="header">
+        <button onClick={() => dispatch(decrement())}>&lt;</button>
+        <span>
+          {currentDate.month}/{currentDate.year}
+        </span>
+        <button onClick={() => dispatch(increment())}>&gt;</button>
+      </div>
+      <Month month={currentDate.month} year={currentDate.year} />
     </>
-    )
+  );
 }
 
 export default App;

@@ -18,12 +18,12 @@ export const dateSlice = createSlice({
   initialState,
   reducers: {
     increment: (state) => {
-        state.year = state.month===11 ? state.year + 1 : state.year;
-        state.month = state.month===11 ? 0 : state.month + 1;
+        state.year = state.month===12 ? state.year + 1 : state.year;
+        state.month = state.month===12 ? 1 : state.month + 1;
     },
     decrement: (state) => {
-        state.year = state.month===0 ? state.year - 1 : state.year;
-        state.month = state.month===0 ? 11 : state.month - 1;
+        state.year = state.month===1 ? state.year - 1 : state.year;
+        state.month = state.month===1 ? 12 : state.month - 1;
     },
   },
 })
