@@ -14,86 +14,74 @@ interface ComponentProps {
 
 export function Month(props: ComponentProps) {
   const [showModal, setShowModal] = useState(false);
-  const [isLoadding, setIsLoadding] = useState(true);
   const [daySelected, setDaySelected] = useState<any>();
-  const [totalDays, setTotalDays] = useState<Day[]>([]);
-  const [newReminderData, setNewReminderData] = useState<Reminder>({name:'',color:'',description:'', time: ''});
+  var totalDays: Day[] = [];
+  const [newReminderData, setNewReminderData] = useState<Reminder>({
+    name: "teste",
+    color: "#000000",
+    description: "teste",
+    time: "15:00",
+  });
   const date = new Date(2021, props.month_id, 0);
 
-  useEffect(() => {
-    getDays();
-  }, [props.month_id]);
-
-  useEffect(() =>{
-    addNewReminder()
-  }, [newReminderData]);
+  getDays();
+  //addNewReminder()
 
   function showAddReminder(id: any) {
     setDaySelected(id);
+    addNewReminder();
     setShowModal((prev) => !prev);
   }
 
   //Array of object days criation
-  async function getDays() {
-    let monthTotalDays = await date.getDate(); //get days amount
-    let totalDaysAux: Day[] = []; //Aux array for setTotalDays push
+  function getDays() {
+    let monthTotalDays = date.getDate(); //get days amount
     for (let day = 1; day <= monthTotalDays; day++) {
-      totalDaysAux.push({
+      totalDays.push({
         id: day,
-        reminders: [
-          {
-            name: "Birthday",
-            color: "#50c8ff",
-            description: "Enzo Birthday in the playground",
-            time: "15:00",
-          },
-        ],
+        reminders: [],
       });
     }
-    setTotalDays(totalDaysAux);
-    totalDays.length > 0 ? setIsLoadding(false) : setIsLoadding(true);
+    //totalDays.length > 0 ? setIsLoadding(false) : setIsLoadding(true);
   }
 
   function addNewReminder(){
-    let aux = totalDays;
-    aux.map((res, i)=>{
+    totalDays.map((res, i)=>{
       if(res.id === daySelected){
-        aux[i].reminders.push(newReminderData);
+        totalDays[i].reminders.push(newReminderData);
       }
     })
-    setTotalDays(aux);
-    console.log(totalDays);
+    console.log(totalDays)
   }
 
   return (
     <>
       <div className="content-month">
-        {!isLoadding && (
-          <div className="grid-month">
-            {totalDays.map((res) => {
-              return (
-                <div className="day" key={res.id}>
-                  <div className="day-header">
-                    <span>{res.id}</span>
-                    <button onClick={() => showAddReminder(res.id)}>+</button>
-                  </div>
-                  <div className="reminders">
-                    {res.reminders.map((el) => {
-                      return (
-                        <div
-                          className="reminder"
-                          style={{ backgroundColor: el.color }}
-                        >
-                          {el.name}
-                        </div>
-                      );
-                    })}
-                  </div>
+        <div className="grid-month">
+          {totalDays.map((res) => {
+            return (
+              <div className="day" key={res.id}>
+                <div className="day-header">
+                  <span>{res.id}</span>
+                  <button onClick={() => showAddReminder(res.id)}>+</button>
                 </div>
-              );
-            })}
-          </div>
-        )}
+                <div className="reminders">
+                  {res.reminders.map((el, i) => {
+                    return (
+                      <div
+                        key={i}
+                        className="reminder"
+                        style={{ backgroundColor: el.color }}
+                      >
+                        {el.name}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
       {showModal && (
         <AddReminder
