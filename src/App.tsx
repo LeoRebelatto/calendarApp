@@ -38,13 +38,14 @@ function App() {
     let actualYear = new Date().getFullYear();
     dispatch(setYear(actualYear));
     dispatch(setMonth(actualMonth));
+    history.push("/");
   }
 
   return (
     <>
       <div className="header">
         <div className="option" onClick={currentDay}>
-          Current Day
+          Current Month
         </div>
         <Switch>
           <Route exact path="/">

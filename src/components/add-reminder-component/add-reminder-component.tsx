@@ -10,11 +10,11 @@ import "./add-reminder-component.scss";
 import thrashIcon from "../../assets/delete.svg";
 
 interface ComponentProps {
-  reminderToEdit?: Reminder;
-  type: string;
-  showDialog: boolean;
-  day: number;
-  setShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  reminderToEdit?: Reminder,
+  type: string,
+  showDialog: boolean,
+  day: number,
+  setShowDialog: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export default function AddReminder(props: ComponentProps) {
@@ -22,8 +22,9 @@ export default function AddReminder(props: ComponentProps) {
   const [name, setName] = React.useState<string>(
     props.reminderToEdit?.name ? props.reminderToEdit?.name : ""
   );
+  const [messageError, setMessageError] = React.useState<string>("");
   const [color, setColor] = React.useState<string>(
-    props.reminderToEdit?.color ? props.reminderToEdit?.color : ""
+    props.reminderToEdit?.color ? props.reminderToEdit?.color : "#1F2833"
   );
   var id = props.reminderToEdit?.id ? props.reminderToEdit?.id : idGenerate(); //Generate id for localStorage key
   const [time, setTime] = React.useState<Date>(
@@ -38,7 +39,8 @@ export default function AddReminder(props: ComponentProps) {
   }
 
   function newReminder() {
-    let date = new Date(currentDate.year, currentDate.month, props.day);
+    if(name.length>0){
+      let date = new Date(currentDate.year, currentDate.month, props.day);
     let reminder: Reminder = {
       id: id,
       date: date.toString(),
@@ -48,6 +50,9 @@ export default function AddReminder(props: ComponentProps) {
     };
     props.setShowDialog((prev: boolean) => !prev);
     localStorage.setItem(id, JSON.stringify(reminder));
+    }else{
+      setMessageError('The reminder has to have a name!')
+    }
   }
 
   function removeReminder() {
@@ -81,10 +86,13 @@ export default function AddReminder(props: ComponentProps) {
             </label>
           </div>
           <TextField
+            error={messageError.length===0 ? false: true}
             id="standard-basic"
             label="Name"
             variant="standard"
             value={name}
+            inputProps={{ maxLength : 30 }}
+            helperText={messageError}
             onChange={(e) => setName(e.target.value)}
           />
           <div className="timeAndColor">
@@ -103,6 +111,7 @@ export default function AddReminder(props: ComponentProps) {
             <div className="color">
               <input
                 type="color"
+                value={color}
                 onChange={(e) => setColor(e.target.value)}
               ></input>
             </div>

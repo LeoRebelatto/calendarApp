@@ -1,0 +1,27 @@
+.content-all-reminders {
+  margin-top: 10px;
+  width: 100%;
+  height: 100%;
+  .title {
+      font-size: 1.2;
+      font-weight: 600;
+      color: var(--color-primary);
+  }
+  .reminder {
+    margin: 5px 0;
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* number of lines to show */
+    -webkit-box-orient: vertical;
+  }
+  .reminder:hover {
+    opacity: 0.9;
+    transform: scale(1.01);
+    transition: 200ms;
+  }
+}

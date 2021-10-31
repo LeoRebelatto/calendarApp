@@ -29,4 +29,22 @@ describe("Add-reminder", () => {
     fireEvent.click(screen.getByTestId("buttonAdd"));
     expect(localStorage.length).toBe(1);
   });
+
+//   it("test when edit reminder the localStorage length continues the same", () => {
+//     let length = localStorage.length;
+//     render(
+//       <Provider store={store}>
+//         <AddReminder
+//           reminderToEdit={reminderToEdit}
+//           type="edit"
+//           showDialog={true}
+//           setShowDialog={() => true}
+//           day={1}
+//         />
+//       </Provider>
+//     );
+//     fireEvent.click(screen.getByTestId("buttonAdd"));
+//     fireEvent.click(screen.getByTestId("buttonAdd"));
+//     expect(localStorage.length).toEqual(length);
+//   });
 });

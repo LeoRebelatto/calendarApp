@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { Reminder } from "../../_interfaces/reminder.interface";
 import AddReminder from "../add-reminder-component/add-reminder-component";
+import { RemindersDay } from "../reminders-day-component/reminders-day-component";
 import "./month-component.scss";
 
 interface Day {
@@ -13,9 +14,18 @@ interface Day {
 export function Month() {
   const currentDate = useSelector((state: RootState) => state.data);
   const [showDialog, setShowDialog] = useState(false);
+  const [showReminders, setShowReminders] = useState(false);
   const [daySelected, setDaySelected] = useState<any>();
   const [typeDialog, setTypeDialog] = useState<string>("");
-  const [reminderToEdit, setReminderToEdit] = useState<Reminder>();
+  //Init object reminder
+  const [reminderToEdit, setReminderToEdit] = useState<Reminder>({
+    name: "",
+    date: "",
+    color: "",
+    time: new Date("2021-01-01T00:00:00"),
+    id: "",
+  });
+  const [remindersInDay, setRemindersInDay] = useState<Reminder[]>([]);
   var totalDays: Day[] = [];
   var prevDays: Day[] = [];
   var nextDays: Day[] = [];
@@ -28,7 +38,6 @@ export function Month() {
   //Open dialog in new reminder mode
   function showAddReminder(day: any) {
     setTypeDialog("new");
-    setReminderToEdit({ name: "", date: "", color: "", time: new Date("2021-01-01T00:00:00") , id: "" });
     setDaySelected(day);
     setShowDialog((prev) => !prev);
   }
@@ -40,6 +49,18 @@ export function Month() {
     setDaySelected(day);
     setShowDialog((prev) => !prev);
   }
+
+  //Show All reminders in a day
+  function showAllReminders(reminders: Reminder[], day: any) {
+    setDaySelected(day);
+    setShowReminders(true);
+    setRemindersInDay(reminders);
+    setTimeout(() => {
+      window.scrollTo(0,1000)
+    }, 100);
+    
+  }
+
 
   //Array of object days criation
   function getDays() {
@@ -74,9 +95,9 @@ export function Month() {
   function getNextMonthDays() {
     let dateStart = new Date(currentDate.year, currentDate.month - 1, 0);
     let nextMonth = totalDays.length + dateStart.getDay() + 1;
-    nextMonth = 7 - (nextMonth%7);
-    if(nextMonth < 7){
-      for(let i = 1; i<= nextMonth; i++){
+    nextMonth = 7 - (nextMonth % 7);
+    if (nextMonth < 7) {
+      for (let i = 1; i <= nextMonth; i++) {
         nextDays.push({
           id: i,
           reminders: [],
@@ -116,6 +137,7 @@ export function Month() {
     sortReminders();
   }
 
+
   function sortReminders() {
     totalDays.forEach((res) => {
       res.reminders.sort(function (a, b) {
@@ -135,13 +157,13 @@ export function Month() {
     <>
       <div className="content-month">
         <div className="grid-month">
-          <span className="week-day">Sunday</span>
-          <span className="week-day">Monday</span>
-          <span className="week-day">Tuesday</span>
-          <span className="week-day">Wednesday</span>
-          <span className="week-day">Thursday</span>
-          <span className="week-day">Friday</span>
-          <span className="week-day">Saturday</span>
+          <span className="week-day">Sun</span>
+          <span className="week-day">Mon</span>
+          <span className="week-day">Tue</span>
+          <span className="week-day">Wed</span>
+          <span className="week-day">Thu</span>
+          <span className="week-day">Fri</span>
+          <span className="week-day">Sat</span>
           {prevDays.map((prev) => {
             return (
               <div className="prev-day" key={prev.id}>
@@ -156,33 +178,48 @@ export function Month() {
               <div className="day" key={res.id}>
                 <div className="day-header">
                   <span>{res.id}</span>
-                  <button onClick={() => showAddReminder(res.id)}>+</button>
+                  <button
+                    onClick={() => showAddReminder(res.id)}
+                    data-testid="newReminderButton"
+                  >
+                    +
+                  </button>
                 </div>
-                <div className="reminders">
+                <div className="reminders d-none">
                   {res.reminders.map((el, i) => {
-                    if(i<2){
+                    if (i < 2) {
                       return (
                         <div
                           key={i}
-                          className="reminder"
+                          className="reminder \"
                           style={{ backgroundColor: el.color }}
-                          onClick={() => showEditReminder(el, res.id)}
-                        >
-                          {`${new Date(el.time).getHours()}:${new Date(el.time).getMinutes()} `} -
-                          {` ${el.name}`}
+                          onClick={() => showEditReminder(el, res.id)}>
+                          {`${new Date(el.time).getHours()}:${new Date(el.time).getMinutes()<10?'0':''}${new Date(el.time).getMinutes()} `}
+                          {" "}-{` ${el.name}`}
                         </div>
                       );
-                    }else{
-                      if(i===2){
-                        return(
-                          <div className="more-reminders" key={i}>
-                          ...
-                        </div>
-                        )
+                    } else {
+                      if (i === 2) {
+                        return (
+                          <div
+                            className="more-reminders"
+                            key={i}
+                            onClick={() => showAllReminders(res.reminders, res.id)}>
+                            ...
+                          </div>
+                        );
                       }
-                      return(null)
+                      return null;
                     }
                   })}
+                </div>
+                <div className="reminders-mobile">
+                  {res.reminders.length > 0?
+                        <div
+                            className="more-reminders"
+                            onClick={() => showAllReminders(res.reminders, res.id)}>
+                            ...
+                          </div>:null}
                 </div>
               </div>
             );
@@ -197,6 +234,13 @@ export function Month() {
             );
           })}
         </div>
+        {showReminders && (<RemindersDay
+          setEditDialog={setTypeDialog}
+          allReminders={remindersInDay}
+          day={daySelected}
+          setShowDialog={setShowDialog}
+          setReminderToEdit={setReminderToEdit}
+        />)}
       </div>
       {showDialog && (
         <AddReminder
