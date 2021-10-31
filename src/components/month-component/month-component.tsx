@@ -28,7 +28,7 @@ export function Month() {
   //Open dialog in new reminder mode
   function showAddReminder(day: any) {
     setTypeDialog("new");
-    setReminderToEdit({ name: "", date: "", color: "", time: new Date("2014-08-18T00:00:00") , id: "" });
+    setReminderToEdit({ name: "", date: "", color: "", time: new Date("0000-00-00T00:00:00") , id: "" });
     setDaySelected(day);
     setShowModal((prev) => !prev);
   }
@@ -157,17 +157,29 @@ export function Month() {
                 </div>
                 <div className="reminders">
                   {res.reminders.map((el, i) => {
-                    return (
-                      <div
-                        key={i}
-                        className="reminder"
-                        style={{ backgroundColor: el.color }}
-                        onClick={() => showEditReminder(el, res.id)}
-                      >
-                        {`${new Date(el.time).getHours()}:${new Date(el.time).getMinutes()} `} -
-                        {` ${el.name}`}
-                      </div>
-                    );
+                    if(i<2){
+                      return (
+                        <div
+                          key={i}
+                          className="reminder"
+                          style={{ backgroundColor: el.color }}
+                          onClick={() => showEditReminder(el, res.id)}
+                        >
+                          {`${new Date(el.time).getHours()}:${new Date(el.time).getMinutes()} `} -
+                          {` ${el.name}`}
+                        </div>
+                      );
+                    }else{
+                      if(i===2){
+                        return(
+                          <div className="more-reminders">
+                          ...
+                        </div>
+                        )
+                        
+                      }
+                    }
+                    
                   })}
                 </div>
               </div>

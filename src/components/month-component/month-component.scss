@@ -12,7 +12,7 @@
       text-align: center;
     }
     .prev-day {
-      height: 100px;
+      height: 130px;
       border: 2px solid var(--color-medium);
       opacity: 0.5;
       .day-header {
@@ -25,7 +25,7 @@
       }
     }
     .day {
-      height: 100px;
+      height: 130px;
       min-width: 100px;
       border: 2px solid var(--color-medium);
       .day-header {
@@ -63,9 +63,26 @@
           padding: 5px;
           border-radius: 10px;
           cursor: pointer;
+          margin-bottom: 5px;
         }
         .reminder:hover {
           opacity: 0.9;
+          transform: scale(1.05);
+          transition: 200ms;
+        }
+        .more-reminders {
+          width: 50px;
+          border-radius: 10px;
+          background-color: var(--color-primary) !important;
+          color: var(--color-seccondary) !important;
+          cursor: pointer;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .more-reminders:hover {
+          background-color: var(--color-seccondary) !important;
+          color: var(--color-primary) !important;
           transform: scale(1.05);
           transition: 200ms;
         }
