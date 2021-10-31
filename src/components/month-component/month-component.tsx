@@ -28,7 +28,7 @@ export function Month() {
   //Open dialog in new reminder mode
   function showAddReminder(day: any) {
     setTypeDialog("new");
-    setReminderToEdit({ name: "", date: "", color: "", time: new Date("0000-00-00T00:00:00") , id: "" });
+    setReminderToEdit({ name: "", date: "", color: "", time: new Date("2021-01-01T00:00:00") , id: "" });
     setDaySelected(day);
     setShowModal((prev) => !prev);
   }

@@ -29,7 +29,7 @@ export default function AddReminder(props: ComponentProps) {
   const [time, setTime] = React.useState<Date>(
     props.reminderToEdit?.time
       ? props.reminderToEdit?.time
-      : new Date("0000-00-00T00:00:00")
+      : new Date("2021-01-01T00:00:00")
   );
 
   function timeChange(newValue: Date) {
@@ -94,7 +94,7 @@ export default function AddReminder(props: ComponentProps) {
                   label="Time"
                   value={time}
                   onChange={(e) =>
-                    timeChange(e ? e : new Date("0000-00-00T00:00:00"))
+                    timeChange(e ? e : new Date("2021-01-01T00:00:00"))
                   }
                   renderInput={(params) => <TextField {...params} />}
                 />
@@ -108,7 +108,7 @@ export default function AddReminder(props: ComponentProps) {
             </div>
           </div>
           <button className="buttonAdd" onClick={() => newReminder()}>
-            Add new reminder
+            {props.type ==="new" ? "Add new reminder":"Edit reminder"}
           </button>
         </div>
       </div>
