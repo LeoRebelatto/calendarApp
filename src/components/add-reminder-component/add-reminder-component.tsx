@@ -29,16 +29,15 @@ export default function AddReminder(props: ComponentProps) {
   const [time, setTime] = React.useState<Date>(
     props.reminderToEdit?.time
       ? props.reminderToEdit?.time
-      : new Date("2014-08-18T00:00:00")
+      : new Date("0000-00-00T00:00:00")
   );
 
-  function timeChange(newValue: Date){
+  function timeChange(newValue: Date) {
     console.log(color);
     setTime(newValue);
-  };
+  }
 
   function newReminder() {
-    console.log(time?.getMinutes);
     let date = new Date(currentDate.year, currentDate.month, props.day);
     let reminder: Reminder = {
       id: id,
@@ -64,17 +63,21 @@ export default function AddReminder(props: ComponentProps) {
 
   return (
     <>
-      <div className="content-add-reminder">
+      <div className="content-add-reminder" >
+      <div className="backgroud-dialog" onClick={()=> props.setShowModal((prev: boolean) => !prev)}></div>
         <div className="dialog">
           <div className="dialog-title">
-            {props.reminderToEdit?.id && <span>Edit Reminder</span>}
-            {!props.reminderToEdit?.id && <span>New Reminder</span>}
+            {props.type === "edit" && <span>Edit Reminder</span>}
+            {props.type === "new" && <span>New Reminder</span>}
             <label className="remove">
-              <img
-                src={thrashIcon}
-                alt="Remove"
-                onClick={() => removeReminder()}
-              />
+            <span onClick={()=> props.setShowModal((prev: boolean) => !prev)}>x</span>
+              {props.type === "edit" && (
+                <img
+                  src={thrashIcon}
+                  alt="Remove"
+                  onClick={() => removeReminder()}
+                />
+              )}
             </label>
           </div>
           <TextField
@@ -90,7 +93,9 @@ export default function AddReminder(props: ComponentProps) {
                 <TimePicker
                   label="Time"
                   value={time}
-                  onChange={(e) => timeChange(e? e : new Date("2014-08-18T00:00:00"))}
+                  onChange={(e) =>
+                    timeChange(e ? e : new Date("0000-00-00T00:00:00"))
+                  }
                   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
