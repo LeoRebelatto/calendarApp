@@ -6,49 +6,74 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 1px 1px;
+    .week-day {
+      background-color: var(--color-primary);
+      color: var(--color-seccondary);
+      text-align: center;
+    }
+    .prev-day {
+      height: 100px;
+      border: 2px solid var(--color-medium);
+      opacity: 0.5;
+      .day-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 10px;
+        span {
+          font-weight: 600;
+        }
+      }
+    }
     .day {
       height: 100px;
-      width: 100%;
+      min-width: 100px;
       border: 2px solid var(--color-medium);
-      .day-header{
-          display: flex;
-          justify-content: space-between;
-          padding: 5px 10px;
-          span{
-              font-weight: 600;
-          }
-          button{
-            border: 1px solid var(--color-primary);
-            color: var(--color-primary);
-            font-weight: 700;
-            background-color: transparent;
-            cursor: pointer;
-            border-radius: 50%;
-            visibility: hidden;
-          }button:hover{
-            background-color: var(--color-primary) !important;
-            color: white !important;
-          }
+      .day-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 10px;
+        span {
+          font-weight: 600;
+        }
+        button {
+          border: 1px solid var(--color-primary);
+          color: var(--color-primary);
+          font-weight: 700;
+          background-color: transparent;
+          cursor: pointer;
+          border-radius: 50%;
+          visibility: hidden;
+        }
+        button:hover {
+          background-color: var(--color-primary) !important;
+          color: white !important;
+        }
       }
       .reminders {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 5px;
+        overflow: hidden;
         .reminder {
-            padding: 5px;
-            border-radius: 10px;
+          width: 90%;
+          padding: 5px;
+          border-radius: 10px;
+          cursor: pointer;
+        }
+        .reminder:hover {
+          opacity: 0.9;
+          transform: scale(1.05);
+          transition: 200ms;
         }
       }
     }
-    .day:hover{
-      .day-header{
-        button{
+    .day:hover {
+      .day-header {
+        button {
           visibility: visible;
         }
       }
-      
     }
   }
 }

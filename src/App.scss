@@ -1,14 +1,50 @@
 .header{
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
   background-color: var(--color-primary);
   padding: 15px;
   border-radius: 0 0 10px 10px;
-  button{
-    background-color: transparent;
-    border: none;
-    font-size: 2rem;
-    color: var(--color-seccondary);
-    cursor: pointer;
+  .navigation{
+    display: flex;
+    align-items: center;
+    button{
+      background-color: transparent;
+      border: none;
+      font-size: 2rem;
+      color: var(--color-seccondary);
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      margin: 5px;
+      display: flex;
+      align-items: center;
+    }
+    button:hover{
+      background-color: var(--color-seccondary);
+      border: none;
+      font-size: 2rem;
+      border-radius: 50%;
+      color: var(--color-primary);
+      transform: scale(1.2);
+      transition: 200ms;
+    }
+    span{
+      color: var(--color-seccondary);
+      font-size: 1.2rem;
+    }
+  }
+  .option{
+      background-color: var(--color-seccondary);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--color-primary);
+      cursor: pointer;
+      padding: 5px 15px;
+      border-radius: 10px;
+      height: 30px;
+      margin: 5px;
+      display: flex;
+      align-items: center;
   }
 }

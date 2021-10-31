@@ -10,23 +10,34 @@ interface Day {
   reminders: Reminder[];
 }
 
-interface ComponentProps {
-  month: number;
-  year: number;
-}
-
-export function Month(props: ComponentProps) {
+export function Month() {
   const currentDate = useSelector((state: RootState) => state.data);
   const [showModal, setShowModal] = useState(false);
   const [daySelected, setDaySelected] = useState<any>();
+  const [typeDialog, setTypeDialog] = useState<string>("");
+  const [reminderToEdit, setReminderToEdit] = useState<Reminder>();
   var totalDays: Day[] = [];
-  const date = new Date(props.year, props.month, 0);
+  var prevDays: Day[] = [];
+  //var nextDays: Day[] = [];
+  const date = new Date(currentDate.year, currentDate.month, 0);
 
   getDays();
-  //addNewReminder()
+  getPrevMonthDays();
+  //getNextMonthDays();
 
-  function showAddReminder(id: any) {
-    setDaySelected(id);
+  //Open dialog in new reminder mode
+  function showAddReminder(day: any) {
+    setTypeDialog("new");
+    setReminderToEdit({ name: "", date: "", color: "", time: new Date("2014-08-18T00:00:00") , id: "" });
+    setDaySelected(day);
+    setShowModal((prev) => !prev);
+  }
+
+  //Open dialog in edit mode
+  function showEditReminder(reminder: Reminder, day: any) {
+    setTypeDialog("edit");
+    setReminderToEdit(reminder);
+    setDaySelected(day);
     setShowModal((prev) => !prev);
   }
 
@@ -42,22 +53,50 @@ export function Month(props: ComponentProps) {
     getReminders();
   }
 
+  //Array for prev Month days in the calendar
+  function getPrevMonthDays() {
+    let dateStart = new Date(currentDate.year, currentDate.month - 1, 0);
+    let prevMonthLastDay = new Date(
+      currentDate.year,
+      currentDate.month + 1,
+      0
+    ).getDate();
+    let startsOn = dateStart.getDay();
+    for (let i = startsOn; i >= 0; i--) {
+      prevDays.push({
+        id: prevMonthLastDay - i,
+        reminders: [],
+      });
+    }
+  }
+
+  // //Array for next Month days in the calendar
+  // function getNextMonthDays() {
+
+  //   console.log(nextStartsOn)
+  //   for (let i = 0; i <= nextStartsOn ; i++) {
+  //     nextDays.push({
+  //       id: i + 1,
+  //       reminders:[]
+  //     });
+  //   }
+  // }
+
   function allStorage() {
-
     var values = [],
-        keys = Object.keys(localStorage),
-        i = keys.length;
+      keys = Object.keys(localStorage),
+      i = keys.length;
 
-    while ( i-- ) {
-        values.push( localStorage.getItem(keys[i]) );
+    while (i--) {
+      values.push(localStorage.getItem(keys[i]));
     }
 
     return values;
-}
+  }
 
-  function getReminders() { 
+  function getReminders() {
     let allReminders = allStorage();
-    allReminders.map((el: any)=>{
+    allReminders.map((el: any) => {
       totalDays.map((res, i) => {
         let date = new Date(
           currentDate.year,
@@ -65,18 +104,50 @@ export function Month(props: ComponentProps) {
           res.id
         ).toString();
         let obj: any | null = JSON.parse(el);
-        if(obj?.date === date){
+        if (obj?.date === date) {
           let teste: Reminder = obj;
-          totalDays[i].reminders.push(teste)
+          totalDays[i].reminders.push(teste);
         }
       });
-    })
+    });
+    sortReminders();
+  }
+
+  function sortReminders() {
+    totalDays.map((res) => {
+      res.reminders.sort(function (a, b) {
+        if (a.time > b.time) {
+          return 1;
+        }
+        if (a.time < b.time) {
+          return -1;
+        }
+        // a must be equal to b
+        return 0;
+      });
+    });
   }
 
   return (
     <>
       <div className="content-month">
         <div className="grid-month">
+          <span className="week-day">Sunday</span>
+          <span className="week-day">Monday</span>
+          <span className="week-day">Tuesday</span>
+          <span className="week-day">Wednesday</span>
+          <span className="week-day">Thursday</span>
+          <span className="week-day">Friday</span>
+          <span className="week-day">Saturday</span>
+          {prevDays.map((prev) => {
+            return (
+              <div className="prev-day" key={prev.id}>
+                <div className="day-header">
+                  <span>{prev.id}</span>
+                </div>
+              </div>
+            );
+          })}
           {totalDays.map((res) => {
             return (
               <div className="day" key={res.id}>
@@ -91,8 +162,10 @@ export function Month(props: ComponentProps) {
                         key={i}
                         className="reminder"
                         style={{ backgroundColor: el.color }}
+                        onClick={() => showEditReminder(el, res.id)}
                       >
-                        {el.name}
+                        {`${new Date(el.time).getHours()}:${new Date(el.time).getMinutes()} `} -
+                        {` ${el.name}`}
                       </div>
                     );
                   })}
@@ -100,10 +173,21 @@ export function Month(props: ComponentProps) {
               </div>
             );
           })}
+          {/* {nextDays.map((next) => {
+            return (
+              <div className="prev-day" key={next.id}>
+                <div className="day-header">
+                  <span>{next.id}</span>
+                </div>
+              </div>
+            );
+          })} */}
         </div>
       </div>
       {showModal && (
         <AddReminder
+          reminderToEdit={reminderToEdit}
+          type={typeDialog}
           showModal={showModal}
           setShowModal={setShowModal}
           day={daySelected}

@@ -5,8 +5,6 @@ import "./_themes/variables.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
-import dateSlice from "./redux/date-slice";
 import {store} from './redux/store'
 
 ReactDOM.render(
