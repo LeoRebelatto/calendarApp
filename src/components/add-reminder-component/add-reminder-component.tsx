@@ -12,9 +12,9 @@ import thrashIcon from "../../assets/delete.svg";
 interface ComponentProps {
   reminderToEdit?: Reminder;
   type: string;
-  showModal: boolean;
+  showDialog: boolean;
   day: number;
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function AddReminder(props: ComponentProps) {
@@ -46,7 +46,7 @@ export default function AddReminder(props: ComponentProps) {
       time: time,
       color: color,
     };
-    props.setShowModal((prev: boolean) => !prev);
+    props.setShowDialog((prev: boolean) => !prev);
     localStorage.setItem(id, JSON.stringify(reminder));
   }
 
@@ -54,7 +54,7 @@ export default function AddReminder(props: ComponentProps) {
     localStorage.removeItem(
       props?.reminderToEdit?.id ? props?.reminderToEdit?.id : ""
     );
-    props.setShowModal((prev: boolean) => !prev);
+    props.setShowDialog((prev: boolean) => !prev);
   }
 
   function idGenerate() {
@@ -64,13 +64,13 @@ export default function AddReminder(props: ComponentProps) {
   return (
     <>
       <div className="content-add-reminder" >
-      <div className="backgroud-dialog" onClick={()=> props.setShowModal((prev: boolean) => !prev)}></div>
+      <div className="backgroud-dialog" onClick={()=> props.setShowDialog((prev: boolean) => !prev)}></div>
         <div className="dialog">
           <div className="dialog-title">
             {props.type === "edit" && <span>Edit Reminder</span>}
             {props.type === "new" && <span>New Reminder</span>}
             <label className="remove">
-            <span onClick={()=> props.setShowModal((prev: boolean) => !prev)}>x</span>
+            <span onClick={()=> props.setShowDialog((prev: boolean) => !prev)}>x</span>
               {props.type === "edit" && (
                 <img
                   src={thrashIcon}
@@ -107,7 +107,7 @@ export default function AddReminder(props: ComponentProps) {
               ></input>
             </div>
           </div>
-          <button className="buttonAdd" onClick={() => newReminder()}>
+          <button className="buttonAdd" data-testid="buttonAdd" onClick={() => newReminder()}>
             {props.type ==="new" ? "Add new reminder":"Edit reminder"}
           </button>
         </div>

@@ -2,9 +2,11 @@ import { useAppDispatch } from "../../redux/hooks";
 import "./year-component.scss";
 
 import { setMonth } from "../../redux/date-slice";
+import { useHistory } from "react-router";
 
 export function Year() {
   const dispatch = useAppDispatch();
+  const history = useHistory();
   const year: string[] = [
     "January",
     "February",
@@ -22,7 +24,7 @@ export function Year() {
 
   function setCurrentMonth(month: number) {
     dispatch(setMonth(month));
-    window.location.href = "/month";
+    history.push("/");
   }
 
   return (
@@ -30,7 +32,7 @@ export function Year() {
       <div className="grid-year">
         {year.map((el, i) => {
           return (
-            <div onClick={() => setCurrentMonth(12)} className="month" key={i}>
+            <div onClick={() => setCurrentMonth(i+1)} className="month" key={i}>
               {el}
             </div>
           );

@@ -12,25 +12,25 @@ interface Day {
 
 export function Month() {
   const currentDate = useSelector((state: RootState) => state.data);
-  const [showModal, setShowModal] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
   const [daySelected, setDaySelected] = useState<any>();
   const [typeDialog, setTypeDialog] = useState<string>("");
   const [reminderToEdit, setReminderToEdit] = useState<Reminder>();
   var totalDays: Day[] = [];
   var prevDays: Day[] = [];
-  //var nextDays: Day[] = [];
+  var nextDays: Day[] = [];
   const date = new Date(currentDate.year, currentDate.month, 0);
 
   getDays();
   getPrevMonthDays();
-  //getNextMonthDays();
+  getNextMonthDays();
 
   //Open dialog in new reminder mode
   function showAddReminder(day: any) {
     setTypeDialog("new");
     setReminderToEdit({ name: "", date: "", color: "", time: new Date("2021-01-01T00:00:00") , id: "" });
     setDaySelected(day);
-    setShowModal((prev) => !prev);
+    setShowDialog((prev) => !prev);
   }
 
   //Open dialog in edit mode
@@ -38,7 +38,7 @@ export function Month() {
     setTypeDialog("edit");
     setReminderToEdit(reminder);
     setDaySelected(day);
-    setShowModal((prev) => !prev);
+    setShowDialog((prev) => !prev);
   }
 
   //Array of object days criation
@@ -70,17 +70,20 @@ export function Month() {
     }
   }
 
-  // //Array for next Month days in the calendar
-  // function getNextMonthDays() {
-
-  //   console.log(nextStartsOn)
-  //   for (let i = 0; i <= nextStartsOn ; i++) {
-  //     nextDays.push({
-  //       id: i + 1,
-  //       reminders:[]
-  //     });
-  //   }
-  // }
+  //Array for next Month days in the calendar
+  function getNextMonthDays() {
+    let dateStart = new Date(currentDate.year, currentDate.month - 1, 0);
+    let nextMonth = totalDays.length + dateStart.getDay() + 1;
+    nextMonth = 7 - (nextMonth%7);
+    if(nextMonth < 7){
+      for(let i = 1; i<= nextMonth; i++){
+        nextDays.push({
+          id: i,
+          reminders: [],
+        });
+      }
+    }
+  }
 
   function allStorage() {
     var values = [],
@@ -96,8 +99,8 @@ export function Month() {
 
   function getReminders() {
     let allReminders = allStorage();
-    allReminders.map((el: any) => {
-      totalDays.map((res, i) => {
+    allReminders.forEach((el: any) => {
+      totalDays.forEach((res, i) => {
         let date = new Date(
           currentDate.year,
           currentDate.month,
@@ -114,7 +117,7 @@ export function Month() {
   }
 
   function sortReminders() {
-    totalDays.map((res) => {
+    totalDays.forEach((res) => {
       res.reminders.sort(function (a, b) {
         if (a.time > b.time) {
           return 1;
@@ -172,20 +175,19 @@ export function Month() {
                     }else{
                       if(i===2){
                         return(
-                          <div className="more-reminders">
+                          <div className="more-reminders" key={i}>
                           ...
                         </div>
                         )
-                        
                       }
+                      return(null)
                     }
-                    
                   })}
                 </div>
               </div>
             );
           })}
-          {/* {nextDays.map((next) => {
+          {nextDays.map((next) => {
             return (
               <div className="prev-day" key={next.id}>
                 <div className="day-header">
@@ -193,15 +195,15 @@ export function Month() {
                 </div>
               </div>
             );
-          })} */}
+          })}
         </div>
       </div>
-      {showModal && (
+      {showDialog && (
         <AddReminder
           reminderToEdit={reminderToEdit}
           type={typeDialog}
-          showModal={showModal}
-          setShowModal={setShowModal}
+          showDialog={showDialog}
+          setShowDialog={setShowDialog}
           day={daySelected}
         />
       )}
