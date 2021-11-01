@@ -1,4 +1,4 @@
-import { LocalizationProvider, TimePicker } from "@mui/lab";
+import { DatePicker, LocalizationProvider, TimePicker } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import TextField from "@mui/material/TextField";
 import React from "react";
@@ -35,6 +35,8 @@ export default function AddReminder(props: ComponentProps) {
       ? props.reminderToEdit?.time
       : new Date("2021-01-01T00:00:00")
   );
+  const [date, setDate] = React.useState<Date | null>(new Date(currentDate.year, currentDate.month, props.day));
+  console.log(date)
 
   //att state if form change
   function timeChange(newValue: Date) {
@@ -52,7 +54,7 @@ export default function AddReminder(props: ComponentProps) {
         name: name,
         time: time,
         color: color,
-        colorFont: colorFont
+        colorFont: colorFont,
       };
       props.setShowDialog((prev: boolean) => !prev);
       localStorage.setItem(id, JSON.stringify(reminder));
@@ -72,9 +74,9 @@ export default function AddReminder(props: ComponentProps) {
     var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
 
     if (luma < 50) {
-      setColorFont('#FFFFFF');
-    }else{
-      setColorFont('#000000');
+      setColorFont("#FFFFFF");
+    } else {
+      setColorFont("#000000");
     }
   }
 
@@ -141,6 +143,14 @@ export default function AddReminder(props: ComponentProps) {
                   onChange={(e) =>
                     timeChange(e ? e : new Date("2021-01-01T00:00:00"))
                   }
+                  renderInput={(params) => <TextField {...params} />}
+                />
+                <DatePicker
+                  label="Basic example"
+                  value={date}
+                  onChange={(newDate) => {
+                    setDate(newDate);
+                  }}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>

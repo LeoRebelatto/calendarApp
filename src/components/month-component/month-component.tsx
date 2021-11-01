@@ -30,7 +30,7 @@ export function Month() {
   var totalDays: Day[] = [];
   var prevDays: Day[] = [];
   var nextDays: Day[] = [];
-  const date = new Date(currentDate.year, currentDate.month, 0);
+  const date = new Date(currentDate.year, currentDate.month +1, 0);
 
   getDays();
   getPrevMonthDays();
@@ -83,7 +83,7 @@ export function Month() {
 
   //Array for prev Month days in the calendar
   function getPrevMonthDays() {
-    let dateStart = new Date(currentDate.year, currentDate.month - 1, 0);
+    let dateStart = new Date(currentDate.year, currentDate.month, 0);
     let prevMonthLastDay = new Date(
       currentDate.year,
       currentDate.month + 1,
@@ -100,7 +100,7 @@ export function Month() {
 
   //Array for next Month days in the calendar
   function getNextMonthDays() {
-    let dateStart = new Date(currentDate.year, currentDate.month - 1, 0);
+    let dateStart = new Date(currentDate.year, currentDate.month, 0);
     let nextMonth = totalDays.length + dateStart.getDay() + 1;
     nextMonth = 7 - (nextMonth % 7);
     if (nextMonth < 7) {

@@ -34,29 +34,29 @@ function App() {
   }
 
   function getMonth(){
-    if(currentDate.month===1){
+    if(currentDate.month===0){
       return 'Jan';
-    }else if(currentDate.month===2){
+    }else if(currentDate.month===1){
       return 'Feb';
-    }else if(currentDate.month===3){
+    }else if(currentDate.month===2){
       return 'Mar';
-    }else if(currentDate.month===4){
+    }else if(currentDate.month===3){
       return 'Apr';
-    }else if(currentDate.month===5){
+    }else if(currentDate.month===4){
       return 'May';
-    }else if(currentDate.month===6){
+    }else if(currentDate.month===5){
       return 'Jun';
-    }else if(currentDate.month===7){
+    }else if(currentDate.month===6){
       return 'Jul';
-    }else if(currentDate.month===8){
+    }else if(currentDate.month===7){
       return 'Aug';
-    }else if(currentDate.month===9){
+    }else if(currentDate.month===8){
       return 'Sep';
-    }else if(currentDate.month===10){
+    }else if(currentDate.month===9){
       return 'Oct';
-    }else if(currentDate.month===11){
+    }else if(currentDate.month===10){
       return 'Nov';
-    }else if(currentDate.month===12){
+    }else if(currentDate.month===11){
       return 'Dec';
     }
   }
