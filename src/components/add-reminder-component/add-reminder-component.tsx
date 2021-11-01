@@ -27,7 +27,7 @@ export default function AddReminder(props: ComponentProps) {
     props.reminderToEdit?.color ? props.reminderToEdit?.color : "#66FCF1"
   );
   const [colorFont, setColorFont] = React.useState<string>(
-    props.reminderToEdit?.color ? props.reminderToEdit?.color : "#000000"
+    props.reminderToEdit?.colorFont ? props.reminderToEdit?.colorFont : "#000000"
   );
   var id = props.reminderToEdit?.id ? props.reminderToEdit?.id : idGenerate(); //Generate id for localStorage key
   const [time, setTime] = React.useState<Date>(
@@ -35,8 +35,8 @@ export default function AddReminder(props: ComponentProps) {
       ? props.reminderToEdit?.time
       : new Date("2021-01-01T00:00:00")
   );
-  const [date, setDate] = React.useState<Date | null>(new Date(currentDate.year, currentDate.month, props.day));
-  console.log(date)
+  const [dateEdit, setDateEdit] = React.useState<Date | null>(new Date(currentDate.year, currentDate.month, props.day));
+  console.log(dateEdit)
 
   //att state if form change
   function timeChange(newValue: Date) {
@@ -50,7 +50,7 @@ export default function AddReminder(props: ComponentProps) {
       let date = new Date(currentDate.year, currentDate.month, props.day);
       let reminder: Reminder = {
         id: id,
-        date: date.toString(),
+        date: props.type==='edit'?dateEdit!.toString():date.toString(),
         name: name,
         time: time,
         color: color,
@@ -138,6 +138,7 @@ export default function AddReminder(props: ComponentProps) {
             <div className="time">
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <TimePicker
+                className="time-picker"
                   label="Time"
                   value={time}
                   onChange={(e) =>
@@ -146,10 +147,11 @@ export default function AddReminder(props: ComponentProps) {
                   renderInput={(params) => <TextField {...params} />}
                 />
                 <DatePicker
+                className="date-picker"
                   label="Basic example"
-                  value={date}
+                  value={dateEdit}
                   onChange={(newDate) => {
-                    setDate(newDate);
+                    setDateEdit(newDate);
                   }}
                   renderInput={(params) => <TextField {...params} />}
                 />

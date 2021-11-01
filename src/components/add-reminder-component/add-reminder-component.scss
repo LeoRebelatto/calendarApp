@@ -67,6 +67,15 @@
       align-items: center;
       .time {
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .time-picker{
+          margin: 15px 0 !important;
+        }
+        .date-picker{
+          margin: 15px 0 !important;
+        }
       }
       .color {
         width: 100%;
