@@ -10,11 +10,11 @@ import "./add-reminder-component.scss";
 import thrashIcon from "../../assets/delete.svg";
 
 interface ComponentProps {
-  reminderToEdit?: Reminder,
-  type: string,
-  showDialog: boolean,
-  day: number,
-  setShowDialog: React.Dispatch<React.SetStateAction<boolean>>
+  reminderToEdit?: Reminder;
+  type: string;
+  showDialog: boolean;
+  day: number;
+  setShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function AddReminder(props: ComponentProps) {
@@ -26,6 +26,9 @@ export default function AddReminder(props: ComponentProps) {
   const [color, setColor] = React.useState<string>(
     props.reminderToEdit?.color ? props.reminderToEdit?.color : "#66FCF1"
   );
+  const [colorFont, setColorFont] = React.useState<string>(
+    props.reminderToEdit?.color ? props.reminderToEdit?.color : "#000000"
+  );
   var id = props.reminderToEdit?.id ? props.reminderToEdit?.id : idGenerate(); //Generate id for localStorage key
   const [time, setTime] = React.useState<Date>(
     props.reminderToEdit?.time
@@ -33,24 +36,45 @@ export default function AddReminder(props: ComponentProps) {
       : new Date("2021-01-01T00:00:00")
   );
 
+  //att state if form change
   function timeChange(newValue: Date) {
+    checkBestColorFont(color);
     setTime(newValue);
   }
 
+  //Add reminder
   function newReminder() {
-    if(name.length>0){
+    if (name.length > 0) {
       let date = new Date(currentDate.year, currentDate.month, props.day);
-    let reminder: Reminder = {
-      id: id,
-      date: date.toString(),
-      name: name,
-      time: time,
-      color: color,
-    };
-    props.setShowDialog((prev: boolean) => !prev);
-    localStorage.setItem(id, JSON.stringify(reminder));
+      let reminder: Reminder = {
+        id: id,
+        date: date.toString(),
+        name: name,
+        time: time,
+        color: color,
+        colorFont: colorFont
+      };
+      props.setShowDialog((prev: boolean) => !prev);
+      localStorage.setItem(id, JSON.stringify(reminder));
+    } else {
+      setMessageError("The reminder has to have a name!");
+    }
+  }
+
+  function checkBestColorFont(color: string) {
+    setColor(color);
+    var c = color.substring(1); // strip #
+    var rgb = parseInt(c, 16); // convert rrggbb to decimal
+    var r = (rgb >> 16) & 0xff; // extract red
+    var g = (rgb >> 8) & 0xff; // extract green
+    var b = (rgb >> 0) & 0xff; // extract blue
+
+    var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
+
+    if (luma < 50) {
+      setColorFont('#FFFFFF');
     }else{
-      setMessageError('The reminder has to have a name!')
+      setColorFont('#000000');
     }
   }
 
@@ -67,32 +91,44 @@ export default function AddReminder(props: ComponentProps) {
 
   return (
     <>
-      <div className="content-add-reminder" >
-      <div className="backgroud-dialog" onClick={()=> props.setShowDialog((prev: boolean) => !prev)}></div>
+      <div className="content-add-reminder">
+        <div
+          className="backgroud-dialog"
+          onClick={() => props.setShowDialog((prev: boolean) => !prev)}
+        ></div>
         <div className="dialog">
           <div className="dialog-title">
-            {props.type === "edit" && <span data-testid="spanEditReminder">Edit Reminder</span>}
-            {props.type === "new" && <span data-testid="spanNewReminder">New Reminder</span>}
+            {props.type === "edit" && (
+              <span data-testid="spanEditReminder">Edit Reminder</span>
+            )}
+            {props.type === "new" && (
+              <span data-testid="spanNewReminder">New Reminder</span>
+            )}
             <label className="remove">
-            <button className="closeDialog" onClick={()=> props.setShowDialog((prev: boolean) => !prev)}>x</button>
+              <button
+                className="closeDialog"
+                onClick={() => props.setShowDialog((prev: boolean) => !prev)}
+              >
+                x
+              </button>
               {props.type === "edit" && (
-                <button className="removeButton" data-testid="removeButton"
-                onClick={() => removeReminder()}>
-                  <img
-                  src={thrashIcon}
-                  alt="Remove"
-                />
-                </button> 
+                <button
+                  className="removeButton"
+                  data-testid="removeButton"
+                  onClick={() => removeReminder()}
+                >
+                  <img src={thrashIcon} alt="Remove" />
+                </button>
               )}
             </label>
           </div>
           <TextField
-            error={messageError.length===0 ? false: true}
+            error={messageError.length === 0 ? false : true}
             id="standard-basic"
             label="Name"
             variant="standard"
             value={name}
-            inputProps={{ maxLength : 30 }}
+            inputProps={{ maxLength: 30 }}
             helperText={messageError}
             onChange={(e) => setName(e.target.value)}
           />
@@ -113,12 +149,16 @@ export default function AddReminder(props: ComponentProps) {
               <input
                 type="color"
                 value={color}
-                onChange={(e) => setColor(e.target.value)}
+                onChange={(e) => checkBestColorFont(e.target.value)}
               ></input>
             </div>
           </div>
-          <button className="buttonAdd" data-testid="buttonAdd" onClick={() => newReminder()}>
-            {props.type ==="new" ? "Add new reminder":"Edit reminder"}
+          <button
+            className="buttonAdd"
+            data-testid="buttonAdd"
+            onClick={() => newReminder()}
+          >
+            {props.type === "new" ? "Add new reminder" : "Edit reminder"}
           </button>
         </div>
       </div>

@@ -33,6 +33,34 @@ function App() {
     history.push("/year");
   }
 
+  function getMonth(){
+    if(currentDate.month===1){
+      return 'Jan';
+    }else if(currentDate.month===2){
+      return 'Feb';
+    }else if(currentDate.month===3){
+      return 'Mar';
+    }else if(currentDate.month===4){
+      return 'Apr';
+    }else if(currentDate.month===5){
+      return 'May';
+    }else if(currentDate.month===6){
+      return 'Jun';
+    }else if(currentDate.month===7){
+      return 'Jul';
+    }else if(currentDate.month===8){
+      return 'Aug';
+    }else if(currentDate.month===9){
+      return 'Sep';
+    }else if(currentDate.month===10){
+      return 'Oct';
+    }else if(currentDate.month===11){
+      return 'Nov';
+    }else if(currentDate.month===12){
+      return 'Dec';
+    }
+  }
+
   function currentDay() {
     let actualMonth = new Date().getMonth() + 1;
     let actualYear = new Date().getFullYear();
@@ -52,7 +80,7 @@ function App() {
             <div className="navigation">
               <button onClick={() => dispatch(decrement())}>&lt;</button>
               <span onClick={goToYear}>
-                {currentDate.month}/{currentDate.year}
+                {getMonth()}/{currentDate.year}
               </span>
               <button onClick={() => dispatch(increment())}>&gt;</button>
             </div>

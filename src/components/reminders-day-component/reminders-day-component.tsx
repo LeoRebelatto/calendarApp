@@ -6,27 +6,28 @@ interface ComponentProps {
   allReminders: Reminder[];
   day: number;
   setShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowReminders: React.Dispatch<React.SetStateAction<boolean>>;
   setReminderToEdit: React.Dispatch<React.SetStateAction<Reminder>>;
   setEditDialog: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export function RemindersDay(props: ComponentProps) {
-    const [reminders, setReminders] = useState<Reminder[]>(props.allReminders);
+  const [reminders, setReminders] = useState<Reminder[]>(props.allReminders);
 
-    useEffect(()=>{
-        setReminders(props.allReminders)
-    }, [props.allReminders])
+  useEffect(() => {
+    setReminders(props.allReminders);
+  }, [props.allReminders]);
 
   //Open dialog to edit reminder
   function openEditReminder(reminder: Reminder) {
-    props.setEditDialog('edit');
+    props.setShowReminders((prev)=> !prev)
+    props.setEditDialog("edit");
     props.setReminderToEdit(reminder);
     props.setShowDialog((prev: boolean) => !prev);
     setTimeout(() => {
-        window.scrollTo(0,0)
-      }, 100);
+      window.scrollTo(0, 0);
+    }, 100);
   }
-
 
   return (
     <div className="content-all-reminders">
@@ -34,10 +35,10 @@ export function RemindersDay(props: ComponentProps) {
       {reminders.map((res, i) => {
         return (
           <div
-          data-testid="reminder-pill-list"
+            data-testid="reminder-pill-list"
             className="reminder"
             key={i}
-            style={{ backgroundColor: res.color }}
+            style={{ backgroundColor: res.color , color: res.colorFont}}
             onClick={() => openEditReminder(res)}
           >
             {`${new Date(res.time).getHours()}:${

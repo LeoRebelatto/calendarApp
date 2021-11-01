@@ -3,5 +3,6 @@ export interface Reminder{
     date: string,
     name: string,
     color: string,
+    colorFont: string
     time:Date
   }

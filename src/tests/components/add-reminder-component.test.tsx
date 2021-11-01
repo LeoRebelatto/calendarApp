@@ -8,11 +8,13 @@ describe("Add-reminder", () => {
   const reminderToEdit: Reminder = {
     name: "test",
     color: "#F0F0F0",
+    colorFont: "#F0F0F0",
     time: new Date("2021-01-01T00:00:00"),
     date: "1",
     id: "_test",
   };
 
+  
   it("test CRUD reminder in localStorage", () => {
     localStorage.clear();
     const dialog = render(

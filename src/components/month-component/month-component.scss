@@ -42,7 +42,7 @@
         button {
           border: 1px solid var(--color-primary);
           color: var(--color-primary);
-          font-size: 1.2rem;
+          font-size: 1.3rem;
           font-weight: 600;
           background-color: transparent;
           cursor: pointer;
@@ -75,7 +75,6 @@
           -webkit-box-orient: vertical;
           font-size: 1rem;
           font-weight: 500;
-          text-shadow: 2px 0px 1px rgba(255, 255, 255, 0.466);
         }
         .reminder:hover {
           opacity: 0.9;
@@ -103,11 +102,16 @@
         position: absolute;
         bottom: 10px;
         display: none;
+        left: 25%;
         width: 30px;
+        height: 10px;
         border-radius: 10px;
-        background-color: var(--color-primary) !important;
+        background-color: var(--color-primary);
         color: var(--color-seccondary) !important;
         cursor: pointer;
+        .more-reminders{
+          margin-bottom: 5px;
+        }
       }
       .reminders-mobile:hover {
         background-color: var(--color-seccondary) !important;
@@ -120,6 +124,9 @@
       .day-header {
         button {
           visibility: visible;
+          
+        }button:hover{
+          background: none !important;
         }
       }
     }
@@ -127,6 +134,9 @@
 }
 
 @media screen and (max-width: 770px) {
+  .content-month{
+    padding: 5px !important;
+  }
   .day {
     min-width: 30px !important;
     height: 70px !important;
@@ -142,5 +152,13 @@
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
+  }
+  .day-header{
+    flex-direction: column;
+    align-items: center;
+    button{
+      border: none !important;
+      margin-right: 5px;
+    }
   }
 }

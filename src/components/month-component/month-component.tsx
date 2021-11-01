@@ -24,6 +24,7 @@ export function Month() {
     color: "",
     time: new Date("2021-01-01T00:00:00"),
     id: "",
+    colorFont: "",
   });
   const [remindersInDay, setRemindersInDay] = useState<Reminder[]>([]);
   var totalDays: Day[] = [];
@@ -45,6 +46,7 @@ export function Month() {
       color: "",
       time: new Date("2021-01-01T00:00:00"),
       id: "",
+      colorFont: "",
     });
     setShowDialog((prev) => !prev);
   }
@@ -63,11 +65,9 @@ export function Month() {
     setDaySelected(day);
     setShowReminders(true);
     setTimeout(() => {
-      window.scrollTo(0,1000)
+      window.scrollTo(0, 1000);
     }, 100);
-    
   }
-
 
   //Array of object days criation
   function getDays() {
@@ -144,7 +144,6 @@ export function Month() {
     sortReminders();
   }
 
-
   function sortReminders() {
     totalDays.forEach((res) => {
       res.reminders.sort(function (a, b) {
@@ -198,11 +197,17 @@ export function Month() {
                       return (
                         <div
                           key={i}
-                          className="reminder \"
-                          style={{ backgroundColor: el.color }}
-                          onClick={() => showEditReminder(el, res.id)}>
-                          {`${new Date(el.time).getHours()}:${new Date(el.time).getMinutes()<10?'0':''}${new Date(el.time).getMinutes()} `}
-                          {" "}-{` ${el.name}`}
+                          className="reminder"
+                          style={{
+                            backgroundColor: el.color,
+                            color: el.colorFont,
+                          }}
+                          onClick={() => showEditReminder(el, res.id)}
+                        >
+                          {`${new Date(el.time).getHours()}:${
+                            new Date(el.time).getMinutes() < 10 ? "0" : ""
+                          }${new Date(el.time).getMinutes()} `}{" "}
+                          -{` ${el.name}`}
                         </div>
                       );
                     } else {
@@ -211,7 +216,10 @@ export function Month() {
                           <div
                             className="more-reminders"
                             key={i}
-                            onClick={() => showAllReminders(res.reminders, res.id)}>
+                            onClick={() =>
+                              showAllReminders(res.reminders, res.id)
+                            }
+                          >
                             ...
                           </div>
                         );
@@ -220,14 +228,16 @@ export function Month() {
                     }
                   })}
                 </div>
-                <div className="reminders-mobile">
-                  {res.reminders.length > 0?
-                        <div
-                            className="more-reminders"
-                            onClick={() => showAllReminders(res.reminders, res.id)}>
-                            ...
-                          </div>:null}
-                </div>
+                {res.reminders.length > 0 ? (
+                  <div className="reminders-mobile">
+                    <div
+                      className="more-reminders"
+                      onClick={() => showAllReminders(res.reminders, res.id)}
+                    >
+                      ...
+                    </div>
+                  </div>
+                ) : null}
               </div>
             );
           })}
@@ -241,13 +251,16 @@ export function Month() {
             );
           })}
         </div>
-        {showReminders && (<RemindersDay
-          setEditDialog={setTypeDialog}
-          allReminders={remindersInDay}
-          day={daySelected}
-          setShowDialog={setShowDialog}
-          setReminderToEdit={setReminderToEdit}
-        />)}
+        {showReminders && (
+          <RemindersDay
+            setEditDialog={setTypeDialog}
+            allReminders={remindersInDay}
+            day={daySelected}
+            setShowDialog={setShowDialog}
+            setShowReminders={setShowReminders}
+            setReminderToEdit={setReminderToEdit}
+          />
+        )}
       </div>
       {showDialog && (
         <AddReminder
