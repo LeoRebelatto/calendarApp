@@ -39,6 +39,13 @@ export function Month() {
   function showAddReminder(day: any) {
     setTypeDialog("new");
     setDaySelected(day);
+    setReminderToEdit({
+      name: "",
+      date: "",
+      color: "",
+      time: new Date("2021-01-01T00:00:00"),
+      id: "",
+    });
     setShowDialog((prev) => !prev);
   }
 
@@ -52,9 +59,9 @@ export function Month() {
 
   //Show All reminders in a day
   function showAllReminders(reminders: Reminder[], day: any) {
+    setRemindersInDay(reminders);
     setDaySelected(day);
     setShowReminders(true);
-    setRemindersInDay(reminders);
     setTimeout(() => {
       window.scrollTo(0,1000)
     }, 100);
@@ -180,7 +187,7 @@ export function Month() {
                   <span>{res.id}</span>
                   <button
                     onClick={() => showAddReminder(res.id)}
-                    data-testid="newReminderButton"
+                    className="newReminderButton"
                   >
                     +
                   </button>

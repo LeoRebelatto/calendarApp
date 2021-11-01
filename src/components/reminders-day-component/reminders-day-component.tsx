@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Reminder } from "../../_interfaces/reminder.interface";
 import "./reminders-day-component.scss";
 
@@ -11,20 +11,30 @@ interface ComponentProps {
 }
 
 export function RemindersDay(props: ComponentProps) {
-  console.log(props.day);
+    const [reminders, setReminders] = useState<Reminder[]>(props.allReminders);
+
+    useEffect(()=>{
+        setReminders(props.allReminders)
+    }, [props.allReminders])
+
+  //Open dialog to edit reminder
   function openEditReminder(reminder: Reminder) {
     props.setEditDialog('edit');
     props.setReminderToEdit(reminder);
     props.setShowDialog((prev: boolean) => !prev);
-    
+    setTimeout(() => {
+        window.scrollTo(0,0)
+      }, 100);
   }
+
 
   return (
     <div className="content-all-reminders">
       <div className="title">All Reminders day {props.day}</div>
-      {props.allReminders.map((res, i) => {
+      {reminders.map((res, i) => {
         return (
           <div
+          data-testid="reminder-pill-list"
             className="reminder"
             key={i}
             style={{ backgroundColor: res.color }}

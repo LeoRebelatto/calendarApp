@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import { Provider } from "react-redux";
 import AddReminder from "../../components/add-reminder-component/add-reminder-component";
 import { store } from "../../redux/store";
@@ -13,38 +13,26 @@ describe("Add-reminder", () => {
     id: "_test",
   };
 
-  it("test if reminder was add in localStorage", () => {
+  it("test CRUD reminder in localStorage", () => {
     localStorage.clear();
-    render(
+    const dialog = render(
       <Provider store={store}>
         <AddReminder
           reminderToEdit={reminderToEdit}
-          type="new"
+          type="edit"
           showDialog={true}
           setShowDialog={() => true}
           day={1}
         />
       </Provider>
     );
-    fireEvent.click(screen.getByTestId("buttonAdd"));
+    fireEvent.click(dialog.getByTestId("buttonAdd"));
     expect(localStorage.length).toBe(1);
+    //Add with the same id should edit in local storage
+    fireEvent.click(dialog.getByTestId("buttonAdd"));
+    expect(localStorage.length).toBe(1);
+    //Remove the reminder created in localStorage
+    fireEvent.click(dialog.getByTestId("removeButton"));
+    expect(localStorage.length).toBe(0);
   });
-
-//   it("test when edit reminder the localStorage length continues the same", () => {
-//     let length = localStorage.length;
-//     render(
-//       <Provider store={store}>
-//         <AddReminder
-//           reminderToEdit={reminderToEdit}
-//           type="edit"
-//           showDialog={true}
-//           setShowDialog={() => true}
-//           day={1}
-//         />
-//       </Provider>
-//     );
-//     fireEvent.click(screen.getByTestId("buttonAdd"));
-//     fireEvent.click(screen.getByTestId("buttonAdd"));
-//     expect(localStorage.length).toEqual(length);
-//   });
 });

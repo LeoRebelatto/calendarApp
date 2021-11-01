@@ -32,7 +32,9 @@
       font-weight: 700;
       color: var(--color-primary);
       .remove {
-        span {
+        .closeDialog {
+          background:none;
+          border: none;
           position: absolute;
           top: 5px;
           right: 10px;
@@ -40,15 +42,21 @@
           color: red;
           cursor: pointer;
         }
-        img {
+        .removeButton {
           position: absolute;
-          top: 15px;
-          right: 30px;
+          background: none;
+          border: none;
+          top: 10px;
+          right: 40px;
           height: 20px;
           width: 20px;
           cursor: pointer;
-          filter: brightness(0) saturate(100%) invert(62%) sepia(100%)
+          img{
+            height: 20px;
+            width: 20px;
+            filter: brightness(0) saturate(100%) invert(62%) sepia(100%)
             saturate(7398%) hue-rotate(351deg) brightness(90%) contrast(142%);
+          }
         }
       }
     }

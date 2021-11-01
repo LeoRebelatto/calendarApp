@@ -24,7 +24,7 @@ export default function AddReminder(props: ComponentProps) {
   );
   const [messageError, setMessageError] = React.useState<string>("");
   const [color, setColor] = React.useState<string>(
-    props.reminderToEdit?.color ? props.reminderToEdit?.color : "#1F2833"
+    props.reminderToEdit?.color ? props.reminderToEdit?.color : "#66FCF1"
   );
   var id = props.reminderToEdit?.id ? props.reminderToEdit?.id : idGenerate(); //Generate id for localStorage key
   const [time, setTime] = React.useState<Date>(
@@ -34,7 +34,6 @@ export default function AddReminder(props: ComponentProps) {
   );
 
   function timeChange(newValue: Date) {
-    console.log(color);
     setTime(newValue);
   }
 
@@ -72,16 +71,18 @@ export default function AddReminder(props: ComponentProps) {
       <div className="backgroud-dialog" onClick={()=> props.setShowDialog((prev: boolean) => !prev)}></div>
         <div className="dialog">
           <div className="dialog-title">
-            {props.type === "edit" && <span>Edit Reminder</span>}
-            {props.type === "new" && <span>New Reminder</span>}
+            {props.type === "edit" && <span data-testid="spanEditReminder">Edit Reminder</span>}
+            {props.type === "new" && <span data-testid="spanNewReminder">New Reminder</span>}
             <label className="remove">
-            <span onClick={()=> props.setShowDialog((prev: boolean) => !prev)}>x</span>
+            <button className="closeDialog" onClick={()=> props.setShowDialog((prev: boolean) => !prev)}>x</button>
               {props.type === "edit" && (
-                <img
+                <button className="removeButton" data-testid="removeButton"
+                onClick={() => removeReminder()}>
+                  <img
                   src={thrashIcon}
                   alt="Remove"
-                  onClick={() => removeReminder()}
                 />
+                </button> 
               )}
             </label>
           </div>

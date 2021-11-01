@@ -73,6 +73,9 @@
           display: -webkit-box;
           -webkit-line-clamp: 1; /* number of lines to show */
           -webkit-box-orient: vertical;
+          font-size: 1rem;
+          font-weight: 500;
+          text-shadow: 2px 0px 1px rgba(255, 255, 255, 0.466);
         }
         .reminder:hover {
           opacity: 0.9;
@@ -128,13 +131,14 @@
     min-width: 30px !important;
     height: 70px !important;
   }
-  .prev-day{
+  .prev-day {
     min-width: 30px !important;
     height: 70px !important;
   }
   .d-none {
     display: none !important;
-  }.reminders-mobile{
+  }
+  .reminders-mobile {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
