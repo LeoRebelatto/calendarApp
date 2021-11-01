@@ -137,8 +137,8 @@ export default function AddReminder(props: ComponentProps) {
           <div className="timeAndColor">
             <div className="time">
               <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <div className="time-picker">
                 <TimePicker
-                className="time-picker"
                   label="Time"
                   value={time}
                   onChange={(e) =>
@@ -146,15 +146,18 @@ export default function AddReminder(props: ComponentProps) {
                   }
                   renderInput={(params) => <TextField {...params} />}
                 />
+                </div>
+                <div className="date-picker">
                 <DatePicker
-                className="date-picker"
-                  label="Basic example"
+                  label="Date"
                   value={dateEdit}
                   onChange={(newDate) => {
                     setDateEdit(newDate);
                   }}
                   renderInput={(params) => <TextField {...params} />}
                 />
+                </div>
+                
               </LocalizationProvider>
             </div>
             <div className="color">
